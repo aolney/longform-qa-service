@@ -1,0 +1,11 @@
+data_repo
+docs/build/
+build/
+dist/
+__pycache__
+*.pyc
+*.swp
+*.egg-info/
+.private/
+.vscode/
+source-me.sh
