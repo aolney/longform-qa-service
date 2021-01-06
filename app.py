@@ -37,6 +37,7 @@ torch.cuda.empty_cache()
 #     print( es_client.indices.get_alias("*") )
 #     print("...done")
 
+# robustly connect to host or docker elasticsearch
 es_client = Elasticsearch(["localhost","es01"])
 
 # bart for seq2seq answer generation
@@ -48,9 +49,8 @@ _ = qa_s2s_model.eval()
 #=======================================================================================
 # Service functions
 
-# Index a book using JSON snippets of book, e.g. 
-# with open("fileName","r") as f:
-#     snippets = json.loads( f.read() )
+# Index a book using JSON snippets of book
+# Since this requires POSTing a whole book, it may exceed POST maximum size
 def createIndex(snippets,indexName='ap_snippets_100w'):
 
         if not es_client.indices.exists(indexName):

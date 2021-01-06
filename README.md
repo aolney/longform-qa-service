@@ -57,6 +57,8 @@ Because the docker image depends on Elasticsearch, you need to use Docker Compos
 docker-compose up
 ```
 
+Note that you may need to change the ports, etc., in `docker-compose.yml` to match your needs and/or pull the docker image from docker hub instead of building your own. In particular, port 9200 on the Elasticsearch node is left open to allow for flexible access outside the current API (e.g. custom document loading). **Obviously nothing will happen if you don't load documents into Elasticsearch first.**
+
 [Postman](https://learning.postman.com/) tests are in `longform-qa.postman_collection.json`, with different ports for flask and gunicorn (5000 for flask, 8000 for gunicorn).
 These tests document how to call the server, but essentially it is POSTing JSON like this:
 

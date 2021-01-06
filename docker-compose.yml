@@ -19,8 +19,9 @@ services:
     #     hard: -1
     volumes:
       - data01:/usr/share/elasticsearch/data
-    # ports:
-    #   - 9200:9200
+    ports:
+    # exposing a port on the host seems to be the easiest way of getting data into the container
+      - 127.0.0.1:9200:9200 
     networks:
       - elastic
     restart: unless-stopped
@@ -67,10 +68,12 @@ services:
     image: longform-qa-service:1.0
     networks: 
     - elastic
+    # mapping 8005 on host to 8000 in container; change to suit
     ports: 
     - 8005:8000
     restart: unless-stopped
 volumes:
+  # data will be persisted if you "docker-compose down"
   data01:
     driver: local
   # data02:
