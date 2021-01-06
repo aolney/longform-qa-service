@@ -1,6 +1,7 @@
 from lfqa_utils import *
 from flask import Flask, request, jsonify
 import json
+import time
 
 # flask development server
 app = Flask(__name__)
@@ -14,14 +15,29 @@ def set_seed(seed):
 set_seed(42)
 
 # cuda cpu or gpu if available and over 4GB
-computeDevice = torch.device("cuda" if torch.cuda.is_available() & torch.cuda.get_device_properties("cuda").total_memory > 4231725056 else "cpu")
+computeDevice = torch.device("cuda" if torch.cuda.is_available()  else "cpu")
+if computeDevice.type == 'cuda':
+    if not( torch.cuda.get_device_properties("cuda").total_memory > 4231725056):
+        computeDevice = torch.device("cpu")
 print ("device ",computeDevice)
 
 # clear cuda memory
 torch.cuda.empty_cache()
 
 # Service set up
-es_client = Elasticsearch([{'host': 'localhost', 'port': '9200'}])
+# try:
+#     print("Trying to connect to dockerized Elasticsearch...")
+#     es_client = Elasticsearch([{'host': 'es01', 'port': '9200'}])
+#     time.sleep(5) 
+#     print( es_client.indices.get_alias("*") )
+#     print("...done")
+# except:
+#     print("Dockerized Elasticsearch not available, trying localhost port 9200...")
+#     es_client = Elasticsearch([{'host': 'localhost', 'port': '9200'}])
+#     print( es_client.indices.get_alias("*") )
+#     print("...done")
+
+es_client = Elasticsearch(["localhost","es01"])
 
 # bart for seq2seq answer generation
 qa_s2s_tokenizer = AutoTokenizer.from_pretrained('yjernite/bart_eli5')

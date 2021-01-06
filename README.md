@@ -21,16 +21,17 @@ See **TODO** for steps to create your own model.
 
 The server is contained in `app.py` with helper functions in `lfqa_utils.py` so all modifications should be made there.
 
-To run the server using flask, do:
+### Development
 
-# TODO: update for docker elasticsearch and ENV and conda
+#### Terminal 1: Start Elasticsearch:
 
-### Terminal 1: Start Elasticsearch, e.g.:
+E.g. using a [command line installation](https://www.elastic.co/guide/en/elasticsearch/reference/current/targz.html):
+
 ```
 ./elasticsearch-7.7.1/bin/elasticsearch & 
 ```
 
-### Terminal 2: Start Flask:
+#### Terminal 2: Start Flask:
 
 ```
 export ENV_TORCH_HOME=./models
@@ -41,6 +42,8 @@ export FLASK_APP=app.py
 flask run
 ```
 
+### Deployment
+
 The Dockerfile in specifies a build using [Gunicorn](https://flask.palletsprojects.com/en/1.1.x/deploying/wsgi-standalone/) for production.
 You can build a docker image with e.g.:
 
@@ -48,10 +51,10 @@ You can build a docker image with e.g.:
 docker build --tag longform-qa-service:1.0 .
 ```
 
-and run with, e.g.:
+Because the docker image depends on Elasticsearch, you need to use Docker Compose to connect an Elasticsearch container to the QA container:
 
 ```
-docker run -p 8000:8000 longform-qa-service:1.0
+docker-compose up
 ```
 
 [Postman](https://learning.postman.com/) tests are in `longform-qa.postman_collection.json`, with different ports for flask and gunicorn (5000 for flask, 8000 for gunicorn).
