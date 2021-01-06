@@ -13,9 +13,9 @@ def set_seed(seed):
 
 set_seed(42)
 
-# cuda gpu or cpu
-cudaDevice = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print ("device ",cudaDevice)
+# cuda cpu or gpu if available and over 4GB
+computeDevice = torch.device("cuda" if torch.cuda.is_available() & torch.cuda.get_device_properties("cuda").total_memory > 4231725056 else "cpu")
+print ("device ",computeDevice)
 
 # clear cuda memory
 torch.cuda.empty_cache()
@@ -25,7 +25,7 @@ es_client = Elasticsearch([{'host': 'localhost', 'port': '9200'}])
 
 # bart for seq2seq answer generation
 qa_s2s_tokenizer = AutoTokenizer.from_pretrained('yjernite/bart_eli5')
-qa_s2s_model = AutoModelForSeq2SeqLM.from_pretrained('yjernite/bart_eli5').to(cudaDevice) #'cuda:0')
+qa_s2s_model = AutoModelForSeq2SeqLM.from_pretrained('yjernite/bart_eli5').to(computeDevice) #'cuda:0')
 _ = qa_s2s_model.eval()
 
 
@@ -79,7 +79,7 @@ def getAnswer(question,indexName='ap_snippets_100w'):
         max_len=256,
         max_input_length=1024,
         # device="cuda:0"
-        device = cudaDevice
+        device = computeDevice
     )[0]
     result['answer'] = answer
     return result

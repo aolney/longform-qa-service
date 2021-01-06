@@ -26,9 +26,9 @@ WORKDIR /app
 RUN conda env create -f /app/environment.yml
 RUN echo "conda activate $(head -1 /app/environment.yml | cut -d' ' -f2)" >> ~/.bashrc
 ENV CONDA_DEFAULT_ENV="$(head -1 /app/environment.yml | cut -d' ' -f2)"
-ENV ENV_TORCH_HOME=/app/huggingface-cache
-ENV TRANSFORMERS_CACHE=/app/huggingface-cache
-ENV HF_HOME=/app/huggingface-cache
+ENV ENV_TORCH_HOME=/app/models
+ENV TRANSFORMERS_CACHE=/app/models
+ENV HF_HOME=/app/models
 
 COPY . /app
 
