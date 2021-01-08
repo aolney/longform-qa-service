@@ -35,4 +35,4 @@ COPY . /app
 EXPOSE 8000
 
 #explicitly calling with bash so that conda env is set up for gunicorn; a bit convoluted to be generic with the env name
-CMD ["/bin/bash", "-c","conda run -n $(head -1 /app/environment.yml | cut -d' ' -f2) gunicorn -w 4 -b 0.0.0.0:8000 app:app"]
+CMD ["/bin/bash", "-c","conda run -n $(head -1 /app/environment.yml | cut -d' ' -f2) gunicorn -w 4 -b 0.0.0.0:8000 app:app --timeout 90"]
